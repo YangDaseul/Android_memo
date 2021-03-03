@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NoteActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/btn_back_black"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="#ffffff"/>
+
+        <TextView
+            android:id="@+id/saveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/modifyBtn"
+            android:text="저장"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#CD5C5C"
+            />
+
+        <TextView
+            android:id="@+id/modifyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="3dp"
+            android:layout_toLeftOf="@+id/deleteBtn"
+            android:text="수정"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#CD5C5C"
+            />
+
+        <TextView
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="3dp"
+            android:text="삭제"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#CD5C5C"
+            />
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/indianred"></RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/titleText"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_box"
+            android:layout_gravity="center"
+            android:hint="제목 입력"
+            android:paddingLeft="5dp"
+            android:textSize="25sp"/>
+
+        <EditText
+            android:id="@+id/contentsText"
+            android:layout_width="350dp"
+            android:layout_height="450dp"
+            android:background="@drawable/contents_box"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:hint="내용 입력"
+            android:paddingLeft="5dp"
+            android:gravity="top"
+            android:textSize="20sp"/>
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
