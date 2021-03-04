@@ -4,21 +4,62 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/titleTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textStyle="normal"
-        android:maxLines="1"
-        android:ellipsize="end"/>
-    <TextView
-        android:id="@+id/contentsTextView"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제목"
+            android:textSize="25sp"
+            android:textStyle="normal"
+            android:textColor="@color/purple_500"
+            android:paddingBottom="20dp"
+            android:paddingRight="10dp"/>
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="normal"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingBottom="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="normal"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내용"
+            android:textStyle="normal"
+            android:textSize="18sp"
+            android:textColor="@color/purple_500"
+            android:paddingBottom="20dp"
+            android:paddingRight="10dp"/>
+        <TextView
+            android:id="@+id/contentsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingBottom="20dp"/>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

@@ -65,6 +65,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
         contentsTextView.setText(memoItem.getContents());
 
         return convertView;
+
     }
 
     @Override

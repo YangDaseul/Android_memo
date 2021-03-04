@@ -19,7 +19,8 @@
             android:layout_marginTop="7dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="5dp"
-            android:background="#ffffff"/>
+            android:background="#ffffff"
+            android:onClick="onClickBtn"/>
 
         <TextView
             android:id="@+id/saveBtn"
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle"
             android:layout_marginTop="7dp"
-            android:layout_toLeftOf="@+id/modifyBtn"
+            android:layout_alignParentRight="true"
             android:text="저장"
             android:gravity="center"
             android:textStyle="bold"
@@ -46,6 +47,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="#CD5C5C"
+
             />
 
         <TextView
@@ -61,6 +63,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="#CD5C5C"
+
             />
     </RelativeLayout>
 

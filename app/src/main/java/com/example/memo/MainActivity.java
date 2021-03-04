@@ -1,11 +1,13 @@
 package com.example.memo;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,21 +55,32 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // 수정, 삭제
 
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MemoItem memoItem = items.get(position);
+
                 intent1 = new Intent(getApplicationContext(), NoteActivity.class);
 
-                int list_id = items.get(position).get_id();
-                String list_title = items.get(position).getTitle();
-                String list_contents = items.get(position).getContents();
+                //int list_id = items.get(position).get_id();
+                //String list_title = items.get(position).getTitle();
+                //String list_contents = items.get(position).getContents();
 
+                int list_id = memoItem.get_id();
+                String list_title = memoItem.getTitle();
+                String list_contents = memoItem.getContents();
+                String type = "update";
+
+                intent1.putExtra("type", type);
                 intent1.putExtra("list_id", list_id);
                 intent1.putExtra("list_title", list_title);
                 intent1.putExtra("list_contents", list_contents);
 
+
                 startActivityForResult(intent1, REQUEST_CODE_MENU2);
             }
         });
+
 
         // 조회기능
         EditText editTextFilter = (EditText) findViewById(R.id.editTextFilter);
@@ -86,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable edit) {
 
                 String filterText = edit.toString();
-                if(filterText.length() > 0){
+                if (filterText.length() > 0) {
                     listView.setFilterText(filterText);
-                }else{
+                } else {
                     listView.clearTextFilter();
                 }
 
@@ -97,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { // 메뉴
@@ -107,9 +121,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { // 작성 페이지로 이동
         int id = item.getItemId();
+        String type = "insert";
 
         if (id == R.id.menu_note) {
             Intent intent = new Intent(this, NoteActivity.class);
+            intent.putExtra("type", type);
             startActivityForResult(intent, REQUEST_CODE_MENU1);
 
             return true;
@@ -125,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 listData();
             }
-        } 
+        }
     }
 
     public void listData() { // 리스트 출력
@@ -148,8 +164,5 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
     }
-
-
-
 
 }

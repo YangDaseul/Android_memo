@@ -15,7 +15,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filter Text"
+            android:text="검 색 : "
             android:textSize="26sp"
             android:textStyle="normal"/>
 
@@ -47,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
-            android:textFilterEnabled="true"/>
+            android:textFilterEnabled="true"
+            />
     </LinearLayout>
 
 </LinearLayout>
