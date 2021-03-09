@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -50,19 +51,22 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listview_item, parent, false);
         }
 
-        TextView titleTextView = convertView.findViewById(R.id.titleTextView);
-        TextView contentsTextView = convertView.findViewById(R.id.contentsTextView);
+        ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
+        TextView contentsTextView = (TextView)convertView.findViewById(R.id.contentsTextView);
+        TextView dateTextView = (TextView)convertView.findViewById(R.id.dateTextView);
+
 
         //filteredItems에서 position에 위치한 데이터 참조 획득
         MemoItem memoItem = filteredItems.get(position);
 
-        titleTextView.setText(memoItem.getTitle());
+        imageView.setImageDrawable(memoItem.getPicture());
         contentsTextView.setText(memoItem.getContents());
+        dateTextView.setText(memoItem.getDate());
 
         return convertView;
 
@@ -89,8 +93,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                 ArrayList<MemoItem> itemList = new ArrayList<MemoItem>();
 
                 for (MemoItem item : items) {
-                    if (item.getTitle().toUpperCase().contains(constraint.toString().toUpperCase()) ||
-                            item.getContents().toUpperCase().contains(constraint.toString().toUpperCase())) {
+                    if (item.getContents().toUpperCase().contains(constraint.toString().toUpperCase())) {
 
                         itemList.add(item);
 

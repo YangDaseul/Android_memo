@@ -15,104 +15,120 @@
             android:id="@+id/backBtn"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/btn_back_black"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
             android:background="#ffffff"
-            android:onClick="onClickBtn"/>
+            android:onClick="onClickBtn"
+            android:src="@drawable/btn_back_black" />
 
         <TextView
             android:id="@+id/saveBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle"
-            android:layout_marginTop="7dp"
             android:layout_alignParentRight="true"
-            android:text="저장"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="#CD5C5C"
-            />
-
-        <TextView
-            android:id="@+id/modifyBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle"
             android:layout_marginTop="7dp"
-            android:layout_marginLeft="3dp"
-            android:layout_toLeftOf="@+id/deleteBtn"
-            android:text="수정"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rectangle"
             android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="#CD5C5C"
-
-            />
+            android:text="완료"
+            android:textColor="#5F9EA0"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="7dp"
-            android:layout_marginLeft="3dp"
-            android:text="삭제"
+            android:layout_toLeftOf="@+id/saveBtn"
+            android:background="@drawable/rectangle"
             android:gravity="center"
+            android:text="삭제"
+            android:textColor="#5F9EA0"
             android:textStyle="bold"
-            android:textColor="#CD5C5C"
 
             />
     </RelativeLayout>
 
-
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginBottom="20dp"
-        android:background="@color/indianred"></RelativeLayout>
+        android:layout_height="wrap_content">
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/titleText"
-            android:layout_width="350dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/title_box"
-            android:layout_gravity="center"
-            android:hint="제목 입력"
-            android:paddingLeft="5dp"
-            android:textSize="25sp"/>
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="230dp"
+                android:layout_height="2dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="3dp"
+                android:background="#BBBBBB"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0000년 00월 00일" />
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="2dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="10dp"
+                android:background="#BBBBBB"></RelativeLayout>
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/contentsText"
-            android:layout_width="350dp"
-            android:layout_height="450dp"
-            android:background="@drawable/contents_box"
-            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="top"
             android:hint="내용 입력"
             android:paddingLeft="5dp"
-            android:gravity="top"
-            android:textSize="20sp"/>
+            android:scrollbars="vertical"
+            android:typeface="monospace"
+            android:textSize="20sp"
+            />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:layout_alignBottom="@+id/contentsText"
+             />
+
+        <ImageButton
+            android:id="@+id/image_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_marginBottom="5dp"
+            android:background="#ffffff"
+            android:src="@drawable/image_icon01" />
+
+        <ImageButton
+            android:id="@+id/image_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_marginBottom="5dp"
+            android:background="#ffffff"
+            android:src="@drawable/image_icon02" />
+
+    </RelativeLayout>
 
 
 
 
 
-
-
-
-
-
-    </LinearLayout>
 
 </LinearLayout>

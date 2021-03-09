@@ -63,17 +63,14 @@ public class MainActivity extends AppCompatActivity {
                 intent1 = new Intent(getApplicationContext(), NoteActivity.class);
 
                 //int list_id = items.get(position).get_id();
-                //String list_title = items.get(position).getTitle();
                 //String list_contents = items.get(position).getContents();
 
                 int list_id = memoItem.get_id();
-                String list_title = memoItem.getTitle();
                 String list_contents = memoItem.getContents();
                 String type = "update";
 
                 intent1.putExtra("type", type);
                 intent1.putExtra("list_id", list_id);
-                intent1.putExtra("list_title", list_title);
                 intent1.putExtra("list_contents", list_contents);
 
 
@@ -156,10 +153,9 @@ public class MainActivity extends AppCompatActivity {
             cursor.moveToNext();
 
             int _id = cursor.getInt(0);
-            String title = cursor.getString(1);
-            String contents = cursor.getString(2);
+            String contents = cursor.getString(1);
 
-            items.add(new MemoItem(_id, title, contents));
+            //items.add(new MemoItem(_id, contents));
         }
         adapter.notifyDataSetChanged();
 

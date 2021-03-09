@@ -2,60 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginRight="20dp"
+        android:src="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_weight="5">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="제목"
-            android:textSize="25sp"
-            android:textStyle="normal"
-            android:textColor="@color/purple_500"
-            android:paddingBottom="20dp"
-            android:paddingRight="10dp"/>
-
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="normal"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:paddingBottom="20dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="내용"
-            android:textStyle="normal"
-            android:textSize="18sp"
-            android:textColor="@color/purple_500"
-            android:paddingBottom="20dp"
-            android:paddingRight="10dp"/>
         <TextView
             android:id="@+id/contentsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingBottom="20dp"
             android:textSize="16sp"
             android:textStyle="normal"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:paddingBottom="20dp"/>
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
