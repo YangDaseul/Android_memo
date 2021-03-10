@@ -1,17 +1,12 @@
 package com.example.memo;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-
-import java.util.ArrayList;
-
 public class MemoItem {
     int _id;
-    Drawable picture; // 사진의 경로
+    String picture; // 사진의 경로
     String contents;
     String date; // 글 저장된 날짜
 
-    public MemoItem(int _id, Drawable picture, String contents, String date) {
+    public MemoItem(int _id, String picture, String contents, String date) {
         this._id = _id;
         this.picture = picture;
         this.contents = contents;
@@ -26,11 +21,11 @@ public class MemoItem {
         this._id = _id;
     }
 
-    public Drawable getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Drawable picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

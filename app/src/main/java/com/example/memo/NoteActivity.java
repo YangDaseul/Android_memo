@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +35,7 @@ public class NoteActivity extends AppCompatActivity {
 
     Intent intent1;
     int list_id;
-    String list_title, list_contents;
+    String list_title, list_contents, picturePath;
 
     TextView saveBtn, deleteBtn, dateTextView;
 
@@ -44,7 +46,6 @@ public class NoteActivity extends AppCompatActivity {
 
     ImageView imageView;
     ImageButton image_add, image_delete;
-
 
 
 
@@ -62,14 +63,15 @@ public class NoteActivity extends AppCompatActivity {
         deleteBtn = (TextView) findViewById(R.id.deleteBtn);
         deleteBtn.setOnClickListener(this::onClickBtn);
 
-        image_add = (ImageButton)findViewById(R.id.image_add);
+        image_add = (ImageButton) findViewById(R.id.image_add);
         image_add.setOnClickListener(this::onClickBtn);
 
-        image_delete = (ImageButton)findViewById(R.id.image_delete);
+        image_delete = (ImageButton) findViewById(R.id.image_delete);
         image_delete.setOnClickListener(this::onClickBtn);
         image_delete.setVisibility(View.INVISIBLE);
 
-        imageView = (ImageView)findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setVisibility(View.GONE);
 
 
         //아이템 클릭 시 전달된 데이터
@@ -96,15 +98,15 @@ public class NoteActivity extends AppCompatActivity {
         });
 
         //날짜 출력하기
-        dateTextView = (TextView)findViewById(R.id.dateTextView);
+        dateTextView = (TextView) findViewById(R.id.dateTextView);
         dateTextView.setText(getTime());
 
 
     }
 
 
-    public void onClickBtn(View view){
-        switch (view.getId()){
+    public void onClickBtn(View view) {
+        switch (view.getId()) {
             case R.id.deleteBtn:
                 delete(list_id);
                 break;
@@ -113,18 +115,20 @@ public class NoteActivity extends AppCompatActivity {
                 break;
             case R.id.image_add:
                 openGallery();
+                imageView.setVisibility(View.VISIBLE);
                 break;
             case R.id.image_delete:
                 imageDelete();
+                imageView.setVisibility(View.GONE);
                 break;
 
         }
     }
 
 
-    public void openGallery(){
+    public void openGallery() {
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType("image/*"); // 모든 종류의 이미지 타입
         intent.setAction(Intent.ACTION_GET_CONTENT); // 이미지 가져오기
 
         startActivityForResult(intent, 101);
@@ -132,30 +136,43 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
-    public void imageDelete(){ // 추가한 이미지 삭제 시 원래 상태로 되돌리기
+    public void imageDelete() { // 추가한 이미지 삭제 시 photo 아이콘 표시
         imageView.setImageBitmap(null);
 
         image_delete.setVisibility(View.INVISIBLE);
         image_add.setVisibility(View.VISIBLE);
-        
-    }
 
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 101){
-            if(resultCode == RESULT_OK){
+        if (requestCode == 101) {
+            if (resultCode == RESULT_OK) {
                 Uri fileUri = data.getData();
-
                 ContentResolver resolver = getContentResolver();
+                // 실제 파일 경로 구하기
+                String[] filePathColumn = {MediaStore.Images.Media.DATA}; // 기기 기본 갤러리 접근
+                Cursor cursor = resolver.query(fileUri, filePathColumn, null, null, null);
+                cursor.moveToNext();
 
-                try{
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                picturePath = cursor.getString(columnIndex);
+
+                //Log.d("picturePath1", picturePath);
+
+
+                cursor.close();
+
+                try {
+
+                    // 선택한 이미지에서 비트맵 생성
                     InputStream inputStream = resolver.openInputStream(fileUri);
                     Bitmap imgBitmap = BitmapFactory.decodeStream(inputStream);
+                    // 이미지뷰에 세팅
                     imageView.setImageBitmap(imgBitmap);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -165,8 +182,9 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
+
     //현재 날짜 출력
-    private String getTime(){
+    private String getTime() {
         now = System.currentTimeMillis();
         date = new Date(now);
 
@@ -175,9 +193,11 @@ public class NoteActivity extends AppCompatActivity {
 
 
     private void insert() {
-        String title = titleText.getText().toString();
-        String contents = contentsText.getText().toString();
+        String picture = picturePath; // 파일 경로
+        String contents = contentsText.getText().toString(); // 메모 내용
+        String date = dateTextView.getText().toString(); // 날짜
 
+        //Log.d("picture", picture);
         println("insert 호출됨");
 
         if (database == null) {
@@ -185,11 +205,12 @@ public class NoteActivity extends AppCompatActivity {
             return;
         }
 
-        if (title.length() > 0 && contents.length() > 0) { //입력 값이 있을 때
+        if (picture.length() > 0 || contents.length() > 0) { //입력 값이 있을 때
             database.execSQL("insert into " + DatabaseHelper.TABLE_NAME +
-                    "(title, contents) values(" +
-                    "'" + title + "', " +
-                    "'" + contents + "')");
+                    "(picture, contents, date) values(" +
+                    "'" + picture + "', " +
+                    "'" + contents + "', " +
+                    "'" + date + "')");
 
             Toast.makeText(getApplicationContext(), "저장 완료", Toast.LENGTH_LONG).show();
 
@@ -207,14 +228,16 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void modify(int list_id) {
-        String modify_title = titleText.getText().toString();
-        String modify_contents = contentsText.getText().toString();
+        String modify_picture = picturePath; // 파일 경로
+        String modify_contents = contentsText.getText().toString(); // 메모 내용
+        String modify_date = dateTextView.getText().toString(); // 날짜
 
-        if (modify_title.length() > 0 && modify_contents.length() > 0) {// 입력 값이 있을 때
+        if (modify_picture.length() > 0 || modify_contents.length() > 0) {// 입력 값이 있을 때
             String sql = "UPDATE " + DatabaseHelper.TABLE_NAME
                     + " SET "
-                    + " title = '" + modify_title + "'"
+                    + " picture = '" + modify_picture + "'"
                     + " ,contents = '" + modify_contents + "'"
+                    + " ,date = '" + modify_date + "'"
                     + " WHERE "
                     + " _id = " + list_id;
 

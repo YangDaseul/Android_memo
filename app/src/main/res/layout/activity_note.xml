@@ -82,35 +82,38 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/contentsText"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:gravity="top"
-            android:hint="내용 입력"
-            android:paddingLeft="5dp"
-            android:scrollbars="vertical"
-            android:typeface="monospace"
-            android:textSize="20sp"
-            />
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:layout_alignBottom="@+id/contentsText"
-             />
+            <EditText
+                android:id="@+id/contentsText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/imageView"
+                android:layout_marginTop="10dp"
+                android:gravity="top"
+                android:hint="내용 입력"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:typeface="monospace" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
 
         <ImageButton
             android:id="@+id/image_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="3dp"
-            android:layout_alignBottom="@+id/imageView"
-            android:layout_marginBottom="5dp"
             android:background="#ffffff"
             android:src="@drawable/image_icon01" />
 
@@ -118,17 +121,13 @@
             android:id="@+id/image_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="3dp"
-            android:layout_alignBottom="@+id/imageView"
-            android:layout_marginBottom="5dp"
             android:background="#ffffff"
             android:src="@drawable/image_icon02" />
 
+
     </RelativeLayout>
-
-
-
-
 
 
 </LinearLayout>

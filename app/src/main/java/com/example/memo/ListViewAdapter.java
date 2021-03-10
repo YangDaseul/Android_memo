@@ -1,6 +1,12 @@
 package com.example.memo;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter implements Filterable {
@@ -64,13 +71,24 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
         //filteredItems에서 position에 위치한 데이터 참조 획득
         MemoItem memoItem = filteredItems.get(position);
 
-        imageView.setImageDrawable(memoItem.getPicture());
-        contentsTextView.setText(memoItem.getContents());
-        dateTextView.setText(memoItem.getDate());
+        String picturePath = memoItem.getPicture(); // 사진 경로
+        if(picturePath != null && !picturePath.equals("")){ // 사진 경로가 존재하면
+            //Log.d("picturePath2", picturePath);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            imageView.setImageBitmap(bitmap);
+
+        }else{ // 사진 경로가 없다면
+            imageView.setVisibility(View.GONE); // imageView 출력X
+        }
+
+        contentsTextView.setText(memoItem.getContents()); // 메모 내용 출력
+        dateTextView.setText(memoItem.getDate()); // 날짜 출력
 
         return convertView;
 
     }
+
 
     @Override
     public Filter getFilter() {

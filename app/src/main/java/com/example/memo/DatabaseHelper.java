@@ -11,10 +11,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NAME = "list";
     public static final String LIST_ID = "_id";
-    public static final String LIST_TITLE = "title";
+    public static final String LIST_PICTURE = "picture";
     public static final String LIST_CONTENTS = "contents";
+    public static final String LIST_DATE = "date";
 
-    public static final String[] ALL_COLUMNS = {LIST_ID, LIST_TITLE, LIST_CONTENTS};
+
+    public static final String[] ALL_COLUMNS = {LIST_ID, LIST_PICTURE, LIST_CONTENTS, LIST_DATE};
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -24,8 +26,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql = "create table if not exists list("
                 + " _id integer PRIMARY KEY autoincrement, "
-                + " title text, "
-                + " contents text)";
+                + " picture text, "
+                + " contents text, "
+                + " date text)";
 
         db.execSQL(sql);
 

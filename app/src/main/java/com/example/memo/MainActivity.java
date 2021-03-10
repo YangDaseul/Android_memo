@@ -153,9 +153,11 @@ public class MainActivity extends AppCompatActivity {
             cursor.moveToNext();
 
             int _id = cursor.getInt(0);
-            String contents = cursor.getString(1);
+            String picture = cursor.getString(1);
+            String contents = cursor.getString(2);
+            String date = cursor.getString(3);
 
-            //items.add(new MemoItem(_id, contents));
+            items.add(new MemoItem(_id, picture, contents, date));
         }
         adapter.notifyDataSetChanged();
 
