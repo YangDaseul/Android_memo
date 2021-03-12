@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_note"
+        app:showAsAction="always"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="작성" />
+
+    <item
+        android:id="@+id/menu_picutre"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="사진 목록"/>
+
+    <item
+        android:id="@+id/memu_delete"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="최근 삭제 목록"/>
+
+
+</menu>

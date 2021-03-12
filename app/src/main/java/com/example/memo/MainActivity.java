@@ -11,14 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -66,12 +64,15 @@ public class MainActivity extends AppCompatActivity {
                 //String list_contents = items.get(position).getContents();
 
                 int list_id = memoItem.get_id();
+                String list_picture = memoItem.getPicture();
                 String list_contents = memoItem.getContents();
                 String type = "update";
 
                 intent1.putExtra("type", type);
                 intent1.putExtra("list_id", list_id);
+                intent1.putExtra("list_picture", list_picture);
                 intent1.putExtra("list_contents", list_contents);
+
 
 
                 startActivityForResult(intent1, REQUEST_CODE_MENU2);
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { // 메뉴
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_bottom, menu);
         return true;
     }
 

@@ -1,7 +1,9 @@
 package com.example.memo;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -12,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +25,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pedro.library.AutoPermissions;
+import com.pedro.library.AutoPermissionsListener;
+
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class NoteActivity extends AppCompatActivity {
+public class NoteActivity extends AppCompatActivity implements AutoPermissionsListener {
     EditText titleText, contentsText;
 
     DatabaseHelper dbHelper;
@@ -35,7 +42,7 @@ public class NoteActivity extends AppCompatActivity {
 
     Intent intent1;
     int list_id;
-    String list_title, list_contents, picturePath;
+    String list_picture, list_contents, picturePath, modify_picture;
 
     TextView saveBtn, deleteBtn, dateTextView;
 
@@ -45,8 +52,9 @@ public class NoteActivity extends AppCompatActivity {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm"); // date 출력 형식
 
     ImageView imageView;
-    ImageButton image_add, image_delete;
+    ImageButton image_add, image_delete, camera_icon;
 
+    File file;
 
 
     @Override
@@ -68,22 +76,29 @@ public class NoteActivity extends AppCompatActivity {
 
         image_delete = (ImageButton) findViewById(R.id.image_delete);
         image_delete.setOnClickListener(this::onClickBtn);
-        image_delete.setVisibility(View.INVISIBLE);
+
+
+        camera_icon = (ImageButton) findViewById(R.id.camera_icon);
+        camera_icon.setOnClickListener(this::onClickBtn);
 
         imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setVisibility(View.GONE);
 
 
         //아이템 클릭 시 전달된 데이터
         intent1 = getIntent();
         String type = intent1.getStringExtra("type");
+        viewType(type);
 
         list_id = intent1.getIntExtra("list_id", 0);
-        list_title = intent1.getStringExtra("list_title");
+        list_picture = intent1.getStringExtra("list_picture");
         list_contents = intent1.getStringExtra("list_contents");
+
 
         // 전달 받은 데이터 textView에 출력
         contentsText.setText(list_contents);
+        // 전달 받은 사진 imageView에 출력
+        imageView.setImageBitmap(BitmapFactory.decodeFile(list_picture));
+
 
         saveBtn = (TextView) findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener() { // 완료 버튼 눌렀을 때
@@ -101,6 +116,8 @@ public class NoteActivity extends AppCompatActivity {
         dateTextView = (TextView) findViewById(R.id.dateTextView);
         dateTextView.setText(getTime());
 
+        AutoPermissions.Companion.loadAllPermissions(this, 102); // 카메라 연동 권한
+
 
     }
 
@@ -115,18 +132,37 @@ public class NoteActivity extends AppCompatActivity {
                 break;
             case R.id.image_add:
                 openGallery();
-                imageView.setVisibility(View.VISIBLE);
                 break;
             case R.id.image_delete:
                 imageDelete();
-                imageView.setVisibility(View.GONE);
                 break;
+            case R.id.camera_icon:
+                takePicture();
 
         }
     }
 
+    public void viewType(String type) {
+        if (type.equals("insert")) {
+            image_delete.setVisibility(View.GONE);
+        } else if (type.equals("modify")) {
+            image_delete.setVisibility(View.VISIBLE);
 
-    public void openGallery() {
+
+        }
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) { // 카메라 연동 권한 요청
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+    }
+
+
+    public void openGallery() { // 갤러리 연동
         Intent intent = new Intent();
         intent.setType("image/*"); // 모든 종류의 이미지 타입
         intent.setAction(Intent.ACTION_GET_CONTENT); // 이미지 가져오기
@@ -139,7 +175,9 @@ public class NoteActivity extends AppCompatActivity {
     public void imageDelete() { // 추가한 이미지 삭제 시 photo 아이콘 표시
         imageView.setImageBitmap(null);
 
-        image_delete.setVisibility(View.INVISIBLE);
+        picturePath = null;
+
+        image_delete.setVisibility(View.GONE);
         image_add.setVisibility(View.VISIBLE);
 
     }
@@ -148,37 +186,36 @@ public class NoteActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // 갤러리 연동
         if (requestCode == 101) {
             if (resultCode == RESULT_OK) {
-                Uri fileUri = data.getData();
+
                 ContentResolver resolver = getContentResolver();
-                // 실제 파일 경로 구하기
-                String[] filePathColumn = {MediaStore.Images.Media.DATA}; // 기기 기본 갤러리 접근
-                Cursor cursor = resolver.query(fileUri, filePathColumn, null, null, null);
+                Cursor cursor = resolver.query(data.getData(), null, null, null, null);
                 cursor.moveToNext();
 
+                String[] filePathColumn = {MediaStore.MediaColumns.DATA};
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 picturePath = cursor.getString(columnIndex);
-
-                //Log.d("picturePath1", picturePath);
-
+                //String picturePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));  //위 세줄의 한줄 코드
 
                 cursor.close();
 
-                try {
+                Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                imageView.setImageBitmap(bitmap);
 
-                    // 선택한 이미지에서 비트맵 생성
-                    InputStream inputStream = resolver.openInputStream(fileUri);
-                    Bitmap imgBitmap = BitmapFactory.decodeStream(inputStream);
-                    // 이미지뷰에 세팅
-                    imageView.setImageBitmap(imgBitmap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
-
-            image_add.setVisibility(View.INVISIBLE);
+            image_add.setVisibility(View.VISIBLE);
             image_delete.setVisibility(View.VISIBLE);
+
+        } else if (requestCode == 102 && resultCode == RESULT_OK) { // 카메라 연동
+            // 이미지 파일을 Bitmap 객체로 만들기
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+            picturePath = file.getAbsolutePath();
+
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath, options);
+            imageView.setImageBitmap(bitmap);
         }
     }
 
@@ -191,13 +228,35 @@ public class NoteActivity extends AppCompatActivity {
         return dateFormat.format(date);
     }
 
+    public void takePicture() { // 카메라 어플 연동
+        if (file == null) {
+            file = createFile();
+        }
+
+        Uri uri = FileProvider.getUriForFile(this, "com.example.memo.fileprovider", file);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 102); // 사진 찍기 화면 띄우기
+        }
+
+    }
+
+    private File createFile() {
+        String fileName = "capture.jpg"; // capture.jsp 라는 이름으로 파일 저장
+
+        File storageDir = Environment.getExternalStorageDirectory();
+        File outFile = new File(storageDir, fileName);
+
+        return outFile;
+    }
+
 
     private void insert() {
         String picture = picturePath; // 파일 경로
         String contents = contentsText.getText().toString(); // 메모 내용
         String date = dateTextView.getText().toString(); // 날짜
 
-        //Log.d("picture", picture);
         println("insert 호출됨");
 
         if (database == null) {
@@ -205,7 +264,7 @@ public class NoteActivity extends AppCompatActivity {
             return;
         }
 
-        if (picture.length() > 0 || contents.length() > 0) { //입력 값이 있을 때
+        if (picture != null || contents.length() > 0) { //입력 값이 있을 때
             database.execSQL("insert into " + DatabaseHelper.TABLE_NAME +
                     "(picture, contents, date) values(" +
                     "'" + picture + "', " +
@@ -221,18 +280,19 @@ public class NoteActivity extends AppCompatActivity {
 
         } else { // 입력 값이 없을 때
             Toast.makeText(this, "내용을 입력하시오.", Toast.LENGTH_LONG).show();
+            
 
         }
-
 
     }
 
     private void modify(int list_id) {
-        String modify_picture = picturePath; // 파일 경로
+        String modify_picture = picturePath;
         String modify_contents = contentsText.getText().toString(); // 메모 내용
         String modify_date = dateTextView.getText().toString(); // 날짜
 
-        if (modify_picture.length() > 0 || modify_contents.length() > 0) {// 입력 값이 있을 때
+
+        if (modify_contents != null || modify_picture != null) { //입력 값이 있을 때
             String sql = "UPDATE " + DatabaseHelper.TABLE_NAME
                     + " SET "
                     + " picture = '" + modify_picture + "'"
@@ -247,8 +307,10 @@ public class NoteActivity extends AppCompatActivity {
 
             setResult(RESULT_OK);
             finish();
-        } else {//입력 값이 없을 때
+
+        } else { // 입력 값이 없을 때
             Toast.makeText(this, "내용을 입력하시오.", Toast.LENGTH_LONG).show();
+
         }
 
 
@@ -274,5 +336,17 @@ public class NoteActivity extends AppCompatActivity {
 
     public void println(String data) {
         Log.d("data", data);
+    }
+
+    @Override
+    public void onDenied(int requestCode, String[] permissions) {
+        //Toast.makeText(this, "permissions denied : " + permissions.length, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onGranted(int requestCode, String[] permissions) {
+        //Toast.makeText(this, "permissions granted : " + permissions.length, Toast.LENGTH_LONG).show();
+
     }
 }

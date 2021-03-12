@@ -101,7 +101,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 
@@ -124,7 +124,18 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="3dp"
             android:background="#ffffff"
+            android:layout_toRightOf="@+id/camera_icon"
             android:src="@drawable/image_icon02" />
+
+        <ImageButton
+            android:id="@+id/camera_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:src="@drawable/image_icon03"
+            android:layout_toRightOf="@+id/image_add"
+            android:layout_marginLeft="8dp"/>
 
 
     </RelativeLayout>

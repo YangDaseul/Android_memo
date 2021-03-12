@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -73,7 +74,9 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
 
         String picturePath = memoItem.getPicture(); // 사진 경로
         if(picturePath != null && !picturePath.equals("")){ // 사진 경로가 존재하면
-            //Log.d("picturePath2", picturePath);
+
+            //Uri fileUri = Uri.fromFile(new File(picturePath));
+            //Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath());
 
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
             imageView.setImageBitmap(bitmap);
